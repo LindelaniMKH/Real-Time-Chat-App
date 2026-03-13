@@ -1,4 +1,4 @@
-import Socket from "./socket";
+import Socket from "./socket.js";
 
 interface Message {
   [key: string]: string;
@@ -28,4 +28,6 @@ sendBtn.addEventListener("click", function () {
   };
 
   s.sendMsg(msgJson);
+  console.log("Button Pressed");
+  console.log(s.responseListener());
 });

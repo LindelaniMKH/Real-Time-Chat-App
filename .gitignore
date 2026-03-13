@@ -3,3 +3,12 @@ venv/
 
 #Bytecode
 __pycache__/
+
+#Map files
+*.ts.map
+*js.map
+*.d.ts
+
+
+#Node Modules
+node_modules/

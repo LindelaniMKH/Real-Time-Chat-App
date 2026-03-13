@@ -1,20 +1,21 @@
-"use strict";
-exports.__esModule = true;
-var socket_1 = require("./socket");
-var s = new socket_1["default"]("ws://localhost:8765/");
-var sendBtn = document.getElementById("SendBtn");
-var textInput = document.getElementById("TextInput");
+import Socket from "./socket.js";
+const s = new Socket("ws://localhost:8765/");
+const sendBtn = document.getElementById("SendBtn");
+const textInput = document.getElementById("TextInput");
 sendBtn.addEventListener("click", function () {
-    var time = new Date();
-    var hours = time.getHours().toString().padStart(2, "0");
-    var minute = time.getMinutes().toString().padStart(2, "0");
-    var seconds = time.getSeconds().toString().padStart(2, "0");
-    var value = textInput.value;
-    var msgJson = {
+    const time = new Date();
+    const hours = time.getHours().toString().padStart(2, "0");
+    const minute = time.getMinutes().toString().padStart(2, "0");
+    const seconds = time.getSeconds().toString().padStart(2, "0");
+    let value = textInput.value;
+    let msgJson = {
         roomID: "1",
         type: "message",
         message: value,
-        time: "".concat(hours, " : ").concat(minute, " : ").concat(seconds)
+        time: `${hours} : ${minute} : ${seconds}`,
     };
     s.sendMsg(msgJson);
+    console.log("Button Pressed");
+    console.log(s.responseListener());
 });
+//# sourceMappingURL=main.js.map

@@ -3,17 +3,31 @@ import asyncio
 import websockets
 from websockets.asyncio.server import serve
 
+connected_clients: set[object] = set()
+
 def storeMsg() -> None:
     room_messages: dict[list] = {}
 
 async def echo(websocket) -> None:
-    async for message in websocket:
-        await websocket.send(message)
+    connected_clients.add(websocket)
+    print(connected_clients)
+
+    try:
+        async for message in websocket:
+            print(message)
+
+            for client in connected_clients:
+                if client != websocket:
+                    await client.send(json.dumps({'message': message}))
+    except Exception as e:
+        print("Connection error: ", e)
+    finally:
+        connected_clients.remove(websocket)
 
 async def main() -> None:
     async with serve(echo, "localhost", 8765) as server:
-        await server.serve_forever()
-
+        await asyncio.Future()
+        
 if __name__ == "__main__":
     try:
         asyncio.run(main())

@@ -8,26 +8,24 @@ interface Message {
   time: string;
 }
 
+console.log("Test");
+
 const s = new Socket("ws://localhost:8765/");
 const sendBtn = document.getElementById("SendBtn") as HTMLButtonElement;
 const textInput = document.getElementById("TextInput") as HTMLTextAreaElement;
 
-sendBtn.addEventListener("click", function () {
+sendBtn.addEventListener("click", () => {
   const time = new Date();
-  const hours: string = time.getHours().toString().padStart(2, "0");
-  const minute: string = time.getMinutes().toString().padStart(2, "0");
-  const seconds: string = time.getSeconds().toString().padStart(2, "0");
 
-  let value: string = textInput.value;
+  const textValue = textInput.value;
 
   let msgJson: Message = {
     roomID: "1",
     type: "message",
-    message: value,
-    time: `${hours} : ${minute} : ${seconds}`,
+    message: `${textValue}`,
+    time: "",
   };
 
+  console.log(msgJson);
   s.sendMsg(msgJson);
-  console.log("Button Pressed");
-  console.log(s.responseListener());
 });

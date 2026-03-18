@@ -8,16 +8,14 @@ interface Message {
   time: string;
 }
 
-console.log("Test");
-
-const s = new Socket("ws://localhost:8765/");
+const s = new Socket("ws://127.0.0.1:8765/");
 const sendBtn = document.getElementById("SendBtn") as HTMLButtonElement;
 const textInput = document.getElementById("TextInput") as HTMLTextAreaElement;
 
 sendBtn.addEventListener("click", () => {
   const time = new Date();
 
-  const textValue = textInput.value;
+  const textValue = textInput.value.trim();
 
   let msgJson: Message = {
     roomID: "1",
@@ -28,4 +26,7 @@ sendBtn.addEventListener("click", () => {
 
   console.log(msgJson);
   s.sendMsg(msgJson);
+  s.onMessage((data) => {
+    console.log(data);
+  });
 });

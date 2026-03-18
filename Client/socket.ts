@@ -34,7 +34,7 @@ export default class Socket {
     }
   }
 
-  onMessage(callback: (data: StringDict) => void): void {
+  onMessage(callback: (data: StringDict) => void | any): void {
     this._ws.onmessage = (event: MessageEvent) => {
       try {
         const parsed = JSON.parse(event.data);

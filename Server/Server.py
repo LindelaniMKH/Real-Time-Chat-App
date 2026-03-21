@@ -1,9 +1,10 @@
 import json
 import asyncio
-import websockets
+from websockets.server import WebSocketServerProtocol
 from websockets.asyncio.server import serve
 
-connected_clients: set[object] = set()
+connected_clients: set[WebSocketServerProtocol] = set()
+rooms: dict[str: set(WebSocketServerProtocol)]
 
 def storeMsg() -> None:
     room_messages: dict[list] = {}

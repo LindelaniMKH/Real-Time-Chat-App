@@ -1,9 +1,11 @@
 import Socket from "./socket.js";
 
+type messageStr = "join" | "leave" | "message";
+
 interface Message {
   [key: string]: string;
   roomID: string;
-  type: string;
+  type: messageStr;
   message: string;
   time: string;
 }

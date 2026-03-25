@@ -1,21 +1,45 @@
 import json
 import asyncio
-from websockets.server import WebSocketServerProtocol
+from websockets.asyncio.server import ServerConnection
 from websockets.asyncio.server import serve
 
-connected_clients: set[WebSocketServerProtocol] = set()
-rooms: dict[str: set(WebSocketServerProtocol)]
+# NOTE: Server currently doesn't have a way of managing or creating chatrooms
+
+connected_clients: set = set()
+rooms: dict[str: set] = {}
 
 def storeMsg() -> None:
     room_messages: dict[list] = {}
 
+# TODO: Sends the correct message to the correct room
+def handleMessageType(websocket: ServerConnection, connected_clients: set, message: dict) -> None:
+    pass
+
+# TODO: Adds client to the correct chatroom
+def handleJoinType(websocket: ServerConnection, connected_clients: set) -> None:
+    pass
+
+# TODO: Removes client from the correcnt chatroom
+def handleLeaveType(websocket: ServerConnection, connected_clients: set) -> None:
+    pass
+
 async def echo(websocket) -> None:
-    connected_clients.add(websocket)
+    connected_clients.add(websocket) #Keeps track of all connected clients regardless of chatroom joined
     print(connected_clients)
 
     try:
         async for message in websocket:
-            print(message)
+            js = json.loads(message)
+            
+            match js['type']:
+                case 'message':
+                    handleMessageType(websocket, connected_clients, js)
+                case 'join':
+                    pass
+                case 'leave':
+                    pass
+                case _:
+                    pass
 
             for client in connected_clients:
                 if client != websocket:

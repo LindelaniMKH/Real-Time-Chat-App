@@ -1,41 +1,38 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var Socket = /** @class */ (function () {
-    function Socket(wsURL) {
+export default class Socket {
+    constructor(wsURL) {
         this._wsURL = wsURL;
         this._ws = new WebSocket(this._wsURL);
-        this._ws.onopen = function () {
+        this._ws.onopen = () => {
             console.log("Connected to server");
         };
-        this._ws.onclose = function () {
+        this._ws.onclose = () => {
             console.log("Disconned from server");
         };
-        this._ws.onerror = function (error) {
+        this._ws.onerror = (error) => {
             console.error("Websocket error: ", error);
         };
     }
-    Socket.prototype.isOpen = function () {
+    isOpen() {
         return this._ws.readyState == WebSocket.OPEN;
-    };
-    Socket.prototype.sendMsg = function (message) {
+    }
+    sendMsg(message) {
         if (this._ws.readyState === WebSocket.OPEN) {
             this._ws.send(JSON.stringify(message));
         }
         else {
             console.warn("Websocket is not open");
         }
-    };
-    Socket.prototype.onMessage = function (callback) {
-        this._ws.onmessage = function (event) {
+    }
+    onMessage(callback) {
+        this._ws.onmessage = (event) => {
             try {
-                var parsed = JSON.parse(event.data);
+                const parsed = JSON.parse(event.data);
                 callback(parsed);
             }
             catch (err) {
                 console.error("Failed to parse message: ", err);
             }
         };
-    };
-    return Socket;
-}());
-exports.default = Socket;
+    }
+}
+//# sourceMappingURL=socket.js.map

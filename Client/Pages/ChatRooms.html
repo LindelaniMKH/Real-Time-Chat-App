@@ -2,9 +2,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css">
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <script type="module" src="chatroomManager.js"></script>
+        <script type="module" src="/Client/chatroomManager.js"></script>
     </head>
     <body>
         <div class="flex items-center justify-center h-screen">
@@ -13,8 +12,8 @@
                     <h1 class="text-3xl mb-4 ml-2"><b>Chats</b></h1>
                 </div>
 
-                <section>
-                    <a href="./index.html">
+                <div id="Room-List">
+                    <a id="Room 1" href="./index.html">
                         <div class="ml-2 align-middle mt-4">
                             <h2 class="text-lg">Chatroom</h2>
                             <p>message</p>
@@ -23,7 +22,7 @@
 
                     <hr class="border-t-gray-300 my-4"/>
 
-                    <a href="./index.html">
+                    <a id="Room 2" href="./index.html">
                         <div class="ml-2 align-middle">
                             <h2 class="text-lg">Chatroom 2</h2>
                             <p>message</p>
@@ -32,16 +31,17 @@
 
                     <hr class="border-t-gray-300 my-4">
 
-                    <a href="./index.html">
+                    <a id="Room 3" href="./index.html">
                         <div class="ml-2 align-middle">
                             <h2>Chatroom 3</h2>
                             <p>message</p>
                         </div>
                     </a>
 
-                </section>
+                </div>
 
             </main>
         </div>
+        <script type="module" src="/Client/main.js"></script>
     </body>
 </html>

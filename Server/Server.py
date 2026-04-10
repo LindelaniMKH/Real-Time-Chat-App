@@ -6,7 +6,7 @@ from websockets.asyncio.server import serve
 # NOTE: Server currently doesn't have a way of managing or creating chatrooms
 
 connected_clients: set = set()
-rooms: dict[str: set] = {}
+rooms: dict[str, set] = {}
 
 def storeMsg() -> None:
     room_messages: dict[list] = {}
@@ -23,7 +23,7 @@ def handleJoinType(websocket: ServerConnection, connected_clients: set) -> None:
 def handleLeaveType(websocket: ServerConnection, connected_clients: set) -> None:
     pass
 
-async def echo(websocket) -> None:
+async def echo(websocket: ServerConnection) -> None:
     connected_clients.add(websocket) #Keeps track of all connected clients regardless of chatroom joined
     print(connected_clients)
 

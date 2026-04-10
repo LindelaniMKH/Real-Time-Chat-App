@@ -3,15 +3,18 @@ const s = new Socket("ws://127.0.0.1:8765/");
 const sendBtn = document.getElementById("SendBtn");
 const textInput = document.getElementById("TextInput");
 const chatroomList = document.getElementById("Room-List");
-const room_one = document.getElementById("Room 1");
 let roomID;
 if (chatroomList) {
-    const children = Array.from(chatroomList.children);
-    console.log(children);
+    let children = Array.from(chatroomList.children)
+        .filter((child) => child.id)
+        .map((child) => child.id); // Filter array to only contain anchor tag
+    console.log(children); //[a#Room 1, hr.border-t-gray-300.my-4, a#Room 2, hr.border-t-gray-300.my-4, a#Room 3]
     document.addEventListener("DOMContentLoaded", () => {
-        children.forEach((tag, index) => {
-            if (tag) {
-                tag === null || tag === void 0 ? void 0 : tag.addEventListener("click", () => {
+        // Add an event listener for each anchor tag in the children array, when clicked roomID is updated.
+        children.forEach((tagID, index) => {
+            if (tagID) {
+                const tag = document.getElementById(`${tagID}`);
+                tag.addEventListener("click", () => {
                     roomID = tag.id;
                 });
             }

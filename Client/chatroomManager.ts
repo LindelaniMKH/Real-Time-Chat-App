@@ -12,8 +12,8 @@ const chatroomSection = document.getElementById("Room-List") as HTMLDivElement;
 
 if (chatroomSection) {
   const childIDs: Array<string> = Array.from(chatroomSection.children)
-    .filter((child) => child.id)
-    .map((child) => child.id);
+    .filter((child: Element) => child.id)
+    .map((child: Element) => child.id);
 
   console.log(childIDs);
 }

@@ -2,6 +2,7 @@ export default class Socket {
     constructor(wsURL) {
         this._wsURL = wsURL;
         this._ws = new WebSocket(this._wsURL);
+        this._ws.onopen = () => { };
         this._ws.onopen = () => {
             console.log("Connected to server");
         };
@@ -14,6 +15,9 @@ export default class Socket {
     }
     isOpen() {
         return this._ws.readyState == WebSocket.OPEN;
+    }
+    onOpen(callback) {
+        this._ws.addEventListener("open", callback);
     }
     sendMsg(message) {
         if (this._ws.readyState === WebSocket.OPEN) {

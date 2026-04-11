@@ -30,7 +30,7 @@ if (chatroomList) {
       if (tagID) {
         const tag = document.getElementById(`${tagID}`) as HTMLAnchorElement;
         tag.addEventListener("click", () => {
-          roomID = tag.id;
+          roomID = tag.id; //It's still undefinded
         });
       }
     });

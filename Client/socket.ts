@@ -1,4 +1,4 @@
-type StringDict = Record<string, string>;
+type StringDict = Record<string, string | string[]>;
 
 export default class Socket {
   private _wsURL: string;
@@ -8,6 +8,9 @@ export default class Socket {
   constructor(wsURL: string) {
     this._wsURL = wsURL;
     this._ws = new WebSocket(this._wsURL);
+    this._ws.onopen = () => {
+      console.log("Connected to server");
+    };
 
     this._ws.onopen = () => {
       console.log("Connected to server");
@@ -24,6 +27,10 @@ export default class Socket {
 
   isOpen(): boolean {
     return this._ws.readyState == WebSocket.OPEN;
+  }
+
+  onOpen(callback: () => void): void {
+    this._ws.addEventListener("open", callback);
   }
 
   sendMsg(message: StringDict): void {

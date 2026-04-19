@@ -4,20 +4,43 @@ from websockets.asyncio.server import ServerConnection
 from websockets.asyncio.server import serve
 
 # NOTE: Server currently doesn't have a way of managing or creating chatrooms
+# IDEA: Have a rooms dict that has the room's server id has a key and stores the room's client id as the value. Everytime a new room is created a server id is generated and the client id is assigned.
 
 connected_clients: set = set()
-rooms: dict[str, set] = {}
+rooms: dict[str, set] = {} #Used to keep track of each connection in each chatroom. 
+chatRooms: list = []
 
 def storeMsg() -> None:
     room_messages: dict[list] = {}
 
-# TODO: Sends the correct message to the correct room
-def handleMessageType(websocket: ServerConnection, connected_clients: set, message: dict) -> None:
+# TODO: Create a function that creates chat rooms and sends a response to the client to create the room on the client's side
+def createRooms():
     pass
 
-# TODO: Adds client to the correct chatroom
-def handleJoinType(websocket: ServerConnection, connected_clients: set) -> None:
-    pass
+def updateRooms(message: dict) -> None:
+    roomsList: list = message['roomIDs']
+
+    global chatRooms
+    chatRooms = roomsList[:]
+
+    for chatRoom in chatRooms:
+        rooms[chatRoom] = set()
+
+# TODO: Sends the correct message to the correct room
+def handleMessageType(websocket: ServerConnection, connected_clients: set, message: dict) -> None:
+    room = message['roomID']
+
+    if room in chatRooms: # First check if room exists
+        roomClients = rooms[room] # Returns a set of each client server connection
+
+        for client in roomClients:
+            if client != websocket: # Send to other clients in the same room
+                text = message['message']
+                client.send(json.dumps(text))
+
+# TODO: Adds client to the correct chatroom. Client must first join. 
+def handleJoinType(websocket: ServerConnection, connected_clients: set,message: dict) -> None:
+    print(message)
 
 # TODO: Removes client from the correcnt chatroom
 def handleLeaveType(websocket: ServerConnection, connected_clients: set) -> None:
@@ -25,21 +48,23 @@ def handleLeaveType(websocket: ServerConnection, connected_clients: set) -> None
 
 async def echo(websocket: ServerConnection) -> None:
     connected_clients.add(websocket) #Keeps track of all connected clients regardless of chatroom joined
-    print(connected_clients)
 
     try:
         async for message in websocket:
-            js = json.loads(message)
+            js: dict = json.loads(message)
+            type: str = js['type']
             
-            match js['type']:
+            match type:
                 case 'message':
                     handleMessageType(websocket, connected_clients, js)
                 case 'join':
-                    pass
+                    handleJoinType(websocket, connected_clients, js)
                 case 'leave':
                     pass
+                case 'roomUpdate':
+                    updateRooms(js)
                 case _:
-                    pass
+                    print("Unknown message type")
 
             for client in connected_clients:
                 if client != websocket:

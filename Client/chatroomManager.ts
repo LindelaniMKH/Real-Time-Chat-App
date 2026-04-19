@@ -3,7 +3,13 @@ import Socket from "./socket.js";
 
 type messageStr = "join" | "leave" | "message" | "roomUpdate";
 
-interface Message {
+interface joinMessage {
+  [key: string]: string;
+  type: messageStr;
+  roomID: string;
+}
+
+interface updateMessage {
   [key: string]: string | string[];
   type: messageStr;
   roomIDs: Array<string>;
@@ -18,13 +24,31 @@ document.addEventListener("DOMContentLoaded", () => {
       .filter((child: Element) => child.id)
       .map((child: Element) => child.id);
 
-    let msgJson: Message = {
+    let msgJson: updateMessage = {
       type: "roomUpdate",
       roomIDs: childIDs,
     };
 
     s.onOpen(() => {
       s.sendMsg(msgJson);
+    });
+
+    // Add an event listener to each room anchor tag. When clicked a join message is sent to the server for the room.
+    childIDs.forEach((tagID: string, index: number) => {
+      if (tagID) {
+        const element = document.getElementById(
+          `${tagID}`,
+        ) as HTMLAnchorElement;
+        element.addEventListener("click", () => {
+          let joinMsg: joinMessage = {
+            type: "join",
+            roomID: `${tagID}`,
+          };
+
+          console.log(joinMsg);
+          s.sendMsg(joinMsg);
+        });
+      }
     });
   }
 });

@@ -13,6 +13,20 @@ document.addEventListener("DOMContentLoaded", () => {
         s.onOpen(() => {
             s.sendMsg(msgJson);
         });
+        // Add an event listener to each room anchor tag. When clicked a join message is sent to the server for the room.
+        childIDs.forEach((tagID, index) => {
+            if (tagID) {
+                const element = document.getElementById(`${tagID}`);
+                element.addEventListener("click", () => {
+                    let joinMsg = {
+                        type: "join",
+                        roomID: `${tagID}`,
+                    };
+                    console.log(joinMsg);
+                    s.sendMsg(joinMsg);
+                });
+            }
+        });
     }
 });
 //# sourceMappingURL=chatroomManager.js.map

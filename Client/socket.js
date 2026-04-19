@@ -2,7 +2,9 @@ export default class Socket {
     constructor(wsURL) {
         this._wsURL = wsURL;
         this._ws = new WebSocket(this._wsURL);
-        this._ws.onopen = () => { };
+        this._ws.onopen = () => {
+            console.log("Connected to server");
+        };
         this._ws.onopen = () => {
             console.log("Connected to server");
         };

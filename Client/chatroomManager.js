@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         type: "join",
                         roomID: `${tagID}`,
                     };
+                    localStorage.setItem("roomID", tagID);
                     console.log(joinMsg);
                     s.sendMsg(joinMsg);
                 });

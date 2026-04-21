@@ -25,8 +25,10 @@ def updateRooms(message: dict) -> None:
 
     for chatRoom in chatRooms:
         rooms[chatRoom] = set()
+    
+    print(rooms)
 
-# TODO: Sends the correct message to the correct room
+# NOTE: Sends the correct message to the correct room
 def handleMessageType(websocket: ServerConnection, connected_clients: set, message: dict) -> None:
     room = message['roomID']
 
@@ -38,9 +40,13 @@ def handleMessageType(websocket: ServerConnection, connected_clients: set, messa
                 text = message['message']
                 client.send(json.dumps(text))
 
-# TODO: Adds client to the correct chatroom. Client must first join. 
+# NOTE: Adds client to the correct chatroom. Client must first join. 
 def handleJoinType(websocket: ServerConnection, connected_clients: set,message: dict) -> None:
-    print(message)
+    roomSet = rooms[message['roomID']]
+    roomSet.add(websocket)
+
+    print(f'Client {websocket} joined room {message["roomID"]}')
+    print(rooms)
 
 # TODO: Removes client from the correcnt chatroom
 def handleLeaveType(websocket: ServerConnection, connected_clients: set) -> None:
@@ -57,6 +63,7 @@ async def echo(websocket: ServerConnection) -> None:
             match type:
                 case 'message':
                     handleMessageType(websocket, connected_clients, js)
+                    print(js)
                 case 'join':
                     handleJoinType(websocket, connected_clients, js)
                 case 'leave':

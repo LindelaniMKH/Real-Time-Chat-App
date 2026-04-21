@@ -3,7 +3,7 @@ const s = new Socket("ws://127.0.0.1:8765/");
 const sendBtn = document.getElementById("SendBtn");
 const textInput = document.getElementById("TextInput");
 const chatroomList = document.getElementById("Room-List");
-let roomID;
+const roomID = localStorage.getItem("roomID");
 if (chatroomList) {
     let children = Array.from(chatroomList.children)
         .filter((child) => child.id)
@@ -15,7 +15,7 @@ if (chatroomList) {
             if (tagID) {
                 const tag = document.getElementById(`${tagID}`);
                 tag.addEventListener("click", () => {
-                    roomID = tag.id; //It's still undefinded
+                    //roomID = tag.id; //It's still undefinded
                 });
             }
         });

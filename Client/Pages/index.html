@@ -3,17 +3,43 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <script type="module" src="/Client/main.js"></script>
-        <script type="module" src="/Client/socket.js"></script>
+        <script type="module" src="/Client/chatroomManager.js"></script>
     </head>
     <body>
         <div class="flex items-center justify-center h-screen">
             <main class="bg-white h-180 w-150 rounded-lg relative border-2 border-solid">
-                <div class="w-full absolute bottom-0 flex flex-row">
-                    <textarea id="TextInput" class="bg-gray-200 ml-3 w-120 px-2 py-2 my-2 rounded-lg"></textarea>
-                    <button id="SendBtn" class="bg-purple-300 hover:bg-purple-400 rounded-lg ml-2 h-15 w-15 my-2">Send</button>
+                <div class="bg-purple-300 h-20 pt-4 pb-6 rounded-t-lg">
+                    <h1 class="text-3xl mb-4 ml-2"><b>Chats</b></h1>
+                </div>
+
+                <div id="Room-List">
+                    <a id="Room 1" href="./mainChat.html">
+                        <div class="ml-2 align-middle mt-4">
+                            <h2 class="text-lg">Chatroom</h2>
+                            <p>message</p>
+                        </div>
+                    </a>
+
+                    <hr class="border-t-gray-300 my-4"/>
+
+                    <a id="Room 2" href="./mainChat.html">
+                        <div class="ml-2 align-middle">
+                            <h2 class="text-lg">Chatroom 2</h2>
+                            <p>message</p>
+                        </div>
+                    </a>
+
+                    <hr class="border-t-gray-300 my-4">
+
+                    <a id="Room 3" href="./mainChat.html">
+                        <div class="ml-2 align-middle">
+                            <h2>Chatroom 3</h2>
+                            <p>message</p>
+                        </div>
+                    </a>
                 </div>
             </main>
         </div>
+        <script type="module" src="/Client/main.js"></script>
     </body>
 </html>

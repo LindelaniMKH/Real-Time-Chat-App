@@ -13,8 +13,7 @@ interface Message {
 const s = new Socket("ws://127.0.0.1:8765/");
 const sendBtn = document.getElementById("SendBtn") as HTMLButtonElement;
 const textInput = document.getElementById("TextInput") as HTMLTextAreaElement;
-const chatroomList = document.getElementById("Room-List") as HTMLDivElement;
-
+const chatList = document.getElementById("Chat-List") as HTMLDivElement;
 const roomID: string | null = localStorage.getItem("roomID");
 
 sendBtn.addEventListener("click", () => {
@@ -28,9 +27,12 @@ sendBtn.addEventListener("click", () => {
     time: `${today}`,
   };
 
-  console.log(msgJson);
   s.sendMsg(msgJson);
-  s.onMessage((data) => {
-    console.log(data);
-  });
+});
+
+s.onMessage((data) => {
+  const messageDiv = document.createElement("div") as HTMLDivElement;
+  const messageTag = document.createElement("p") as HTMLParagraphElement;
+
+  console.log(data.data);
 });

@@ -2,25 +2,8 @@ import Socket from "./socket.js";
 const s = new Socket("ws://127.0.0.1:8765/");
 const sendBtn = document.getElementById("SendBtn");
 const textInput = document.getElementById("TextInput");
-const chatroomList = document.getElementById("Room-List");
+const chatList = document.getElementById("Chat-List");
 const roomID = localStorage.getItem("roomID");
-if (chatroomList) {
-    let children = Array.from(chatroomList.children)
-        .filter((child) => child.id)
-        .map((child) => child.id); // Filter array to only contain anchor tag
-    console.log(children); //[a#Room 1, hr.border-t-gray-300.my-4, a#Room 2, hr.border-t-gray-300.my-4, a#Room 3]
-    document.addEventListener("DOMContentLoaded", () => {
-        // Add an event listener for each anchor tag in the children array, when clicked roomID is updated.
-        children.forEach((tagID, index) => {
-            if (tagID) {
-                const tag = document.getElementById(`${tagID}`);
-                tag.addEventListener("click", () => {
-                    //roomID = tag.id; //It's still undefinded
-                });
-            }
-        });
-    });
-}
 sendBtn.addEventListener("click", () => {
     const today = new Date().toISOString().split("T")[0];
     const textValue = textInput.value.trim();
@@ -30,10 +13,11 @@ sendBtn.addEventListener("click", () => {
         message: `${textValue}`,
         time: `${today}`,
     };
-    console.log(msgJson);
     s.sendMsg(msgJson);
-    s.onMessage((data) => {
-        console.log(data);
-    });
+});
+s.onMessage((data) => {
+    const messageDiv = document.createElement("div");
+    const messageTag = document.createElement("p");
+    console.log(data.data);
 });
 //# sourceMappingURL=main.js.map

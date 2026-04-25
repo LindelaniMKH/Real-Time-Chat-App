@@ -29,16 +29,20 @@ def updateRooms(message: dict) -> None:
     print(rooms)
 
 # NOTE: Sends the correct message to the correct room
-def handleMessageType(websocket: ServerConnection, connected_clients: set, message: dict) -> None:
+async def handleMessageType(websocket: ServerConnection, connected_clients: set, message: dict) -> None:
+    print(message)
     room = message['roomID']
 
-    if room in chatRooms: # First check if room exists
-        roomClients = rooms[room] # Returns a set of each client server connection
+    try:
+        if room in chatRooms: # First check if room exists
+            roomClients = rooms[room] # Returns a set of each client server connection
 
-        for client in roomClients:
-            if client != websocket: # Send to other clients in the same room
-                text = message['message']
-                client.send(json.dumps(text))
+            for client in roomClients:
+                if client != websocket: # Send to other clients in the same room
+                    text = message['message']
+                    await client.send(json.dumps(text))
+    except Exception:
+        print("Connection between client and server is lost or closed")
 
 # NOTE: Adds client to the correct chatroom. Client must first join. 
 def handleJoinType(websocket: ServerConnection, connected_clients: set,message: dict) -> None:
@@ -62,8 +66,7 @@ async def echo(websocket: ServerConnection) -> None:
             
             match type:
                 case 'message':
-                    handleMessageType(websocket, connected_clients, js)
-                    print(js)
+                    await handleMessageType(websocket, connected_clients, js)
                 case 'join':
                     handleJoinType(websocket, connected_clients, js)
                 case 'leave':
@@ -72,14 +75,29 @@ async def echo(websocket: ServerConnection) -> None:
                     updateRooms(js)
                 case _:
                     print("Unknown message type")
-
+            '''
             for client in connected_clients:
                 if client != websocket:
                     await client.send(json.dumps(message))
-    except Exception as e:
-        print("Connection error: ", e)
+            '''
+    except Exception:
+        print("Connection error: connection closed")
     finally:
         connected_clients.remove(websocket)
+        
+        #TODO: Retrieve all the keys and check for each websocket and remove the correct one
+        setKeys = rooms.keys()
+        listKeys = list(setKeys)
+
+        for roomSet in listKeys:
+            if websocket in roomSet:
+                #roomSet.remove(websocket)
+                pass
+
+
+        for k, v in rooms.items():
+            if websocket in v:
+                v.remove(websocket)
 
 async def main() -> None:
     async with serve(echo, "127.0.0.1", 8765) as server:

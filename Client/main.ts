@@ -31,8 +31,5 @@ sendBtn.addEventListener("click", () => {
 });
 
 s.onMessage((data) => {
-  const messageDiv = document.createElement("div") as HTMLDivElement;
-  const messageTag = document.createElement("p") as HTMLParagraphElement;
-
   console.log(data.data);
 });

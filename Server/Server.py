@@ -49,15 +49,12 @@ def handleJoinType(websocket: ServerConnection, connected_clients: set,message: 
     roomSet = rooms[message['roomID']]
     roomSet.add(websocket)
 
-    print(f'Client {websocket} joined room {message["roomID"]}')
-    print(rooms)
-
 # TODO: Removes client from the correcnt chatroom
 def handleLeaveType(websocket: ServerConnection, connected_clients: set) -> None:
     pass
 
 async def echo(websocket: ServerConnection) -> None:
-    connected_clients.add(websocket) #Keeps track of all connected clients regardless of chatroom joined
+    connected_clients.add(websocket) # Keeps track of all connected clients regardless of chatroom joined
 
     try:
         async for message in websocket:
@@ -75,29 +72,14 @@ async def echo(websocket: ServerConnection) -> None:
                     updateRooms(js)
                 case _:
                     print("Unknown message type")
-            '''
-            for client in connected_clients:
-                if client != websocket:
-                    await client.send(json.dumps(message))
-            '''
     except Exception:
         print("Connection error: connection closed")
     finally:
         connected_clients.remove(websocket)
-        
-        #TODO: Retrieve all the keys and check for each websocket and remove the correct one
-        setKeys = rooms.keys()
-        listKeys = list(setKeys)
-
-        for roomSet in listKeys:
-            if websocket in roomSet:
-                #roomSet.remove(websocket)
-                pass
-
 
         for k, v in rooms.items():
             if websocket in v:
-                v.remove(websocket)
+                v.discard(websocket)
 
 async def main() -> None:
     async with serve(echo, "127.0.0.1", 8765) as server:

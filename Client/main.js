@@ -4,9 +4,20 @@ const sendBtn = document.getElementById("SendBtn");
 const textInput = document.getElementById("TextInput");
 const chatList = document.getElementById("Chat-List");
 const roomID = localStorage.getItem("roomID");
+const today = new Date().toISOString().split("T")[0];
+window.addEventListener("popstate", () => {
+    let msgJson = {
+        roomID: `${roomID}`,
+        type: "leave",
+        time: `${today}`,
+    };
+    s.sendMsg(msgJson);
+});
 sendBtn.addEventListener("click", () => {
-    const today = new Date().toISOString().split("T")[0];
     const textValue = textInput.value.trim();
+    const li = document.createElement("li");
+    li.className =
+        "bg-purple-300 m-2 pl-2 py-1.5 rounded-sm w-35 h-8 wrap-break-word";
     let msgJson = {
         roomID: `${roomID}`,
         type: "message",
@@ -14,10 +25,10 @@ sendBtn.addEventListener("click", () => {
         time: `${today}`,
     };
     s.sendMsg(msgJson);
+    li.textContent = `${textValue}`;
+    chatList.appendChild(li);
 });
 s.onMessage((data) => {
-    const messageDiv = document.createElement("div");
-    const messageTag = document.createElement("p");
-    console.log(data.data);
+    console.log(data.toString());
 });
 //# sourceMappingURL=main.js.map

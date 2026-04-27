@@ -23,12 +23,13 @@ const textInput = document.getElementById("TextInput") as HTMLTextAreaElement;
 const chatList = document.getElementById("Chat-List") as HTMLUListElement;
 const roomID: string | null = localStorage.getItem("roomID");
 const today: string | undefined = new Date().toISOString().split("T")[0];
+const time: string | undefined = new Date().toLocaleTimeString();
 
 window.addEventListener("popstate", () => {
   let msgJson: leaveMessage = {
     roomID: `${roomID}`,
     type: "leave",
-    time: `${today}`,
+    time: `${today}, ${time}`,
   };
   s.sendMsg(msgJson);
 });
@@ -44,7 +45,7 @@ sendBtn.addEventListener("click", () => {
     roomID: `${roomID}`,
     type: "message",
     message: `${textValue}`,
-    time: `${today}`,
+    time: `${today}, ${time}`,
   };
 
   s.sendMsg(msgJson);

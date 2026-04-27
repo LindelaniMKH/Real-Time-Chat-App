@@ -1,7 +1,6 @@
 import Socket from "./socket.js";
 const s = new Socket("ws://127.0.0.1:8765/");
 const chatroomSection = document.getElementById("Room-List");
-const today = new Date().toISOString().split("T")[0];
 document.addEventListener("DOMContentLoaded", () => {
     if (chatroomSection) {
         const childIDs = Array.from(chatroomSection.children)
@@ -27,14 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     s.sendMsg(joinMsg);
                 });
             }
-        });
-        window.addEventListener("popstate", () => {
-            let msgJson = {
-                roomID: `${childIDs}`,
-                type: "leave",
-                time: `${today}`,
-            };
-            s.sendMsg(msgJson);
         });
     }
 });

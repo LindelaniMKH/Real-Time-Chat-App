@@ -24,7 +24,6 @@ interface leaveMessage {
 
 const s = new Socket("ws://127.0.0.1:8765/");
 const chatroomSection = document.getElementById("Room-List") as HTMLDivElement;
-const today: string | undefined = new Date().toISOString().split("T")[0];
 
 document.addEventListener("DOMContentLoaded", () => {
   if (chatroomSection) {
@@ -58,15 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
           s.sendMsg(joinMsg);
         });
       }
-    });
-
-    window.addEventListener("popstate", () => {
-      let msgJson: leaveMessage = {
-        roomID: `${childIDs}`,
-        type: "leave",
-        time: `${today}`,
-      };
-      s.sendMsg(msgJson);
     });
   }
 });

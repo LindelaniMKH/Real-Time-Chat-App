@@ -49,9 +49,11 @@ def handleJoinType(websocket: ServerConnection, connected_clients: set,message: 
     roomSet = rooms[message['roomID']]
     roomSet.add(websocket)
 
-# TODO: Removes client from the correcnt chatroom
+# NOTE: Removes client from the correcnt chatroom
 def handleLeaveType(websocket: ServerConnection, connected_clients: set) -> None:
-    pass
+    for k, v in rooms.items():
+        if websocket in v:
+            v.discard(websocket)
 
 async def echo(websocket: ServerConnection) -> None:
     connected_clients.add(websocket) # Keeps track of all connected clients regardless of chatroom joined
@@ -67,7 +69,7 @@ async def echo(websocket: ServerConnection) -> None:
                 case 'join':
                     handleJoinType(websocket, connected_clients, js)
                 case 'leave':
-                    pass
+                    handleLeaveType(websocket, connected_clients)
                 case 'roomUpdate':
                     updateRooms(js)
                 case _:

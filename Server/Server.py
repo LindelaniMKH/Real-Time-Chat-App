@@ -38,18 +38,18 @@ async def handleMessageType(websocket: ServerConnection, connected_clients: set,
             roomClients = rooms[room] # Returns a set of each client server connection
 
             for client in roomClients:
-                if client != websocket: # Send to other clients in the same room
+                if client != websocket: # Send to other clients in the same room except the sender
                     text = message['message']
                     await client.send(json.dumps(text))
     except Exception:
         print("Connection between client and server is lost or closed")
 
 # NOTE: Adds client to the correct chatroom. Client must first join. 
-def handleJoinType(websocket: ServerConnection, connected_clients: set,message: dict) -> None:
+def handleJoinType(websocket: ServerConnection, connected_clients: set, message: dict) -> None:
     roomSet = rooms[message['roomID']]
     roomSet.add(websocket)
 
-# NOTE: Removes client from the correcnt chatroom
+# NOTE: Removes client from the correct chatroom
 def handleLeaveType(websocket: ServerConnection, connected_clients: set) -> None:
     for k, v in rooms.items():
         if websocket in v:
